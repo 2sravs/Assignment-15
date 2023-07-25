@@ -91,33 +91,80 @@ namespace ConAppAssign_15
             while (j < n2)
                 arr[k++] = rightArray[j++];
         }
-        
-        static void Main(string[] args)
+        public static void ShellSort(int[] arr)
         {
-            int[] arr = { 38, 23, 45, 34, 4, 2, 10, 82 };
-            Console.WriteLine("*********Merge Sort***********");
-            Console.WriteLine("Original Array:" + string.Join(",", arr));
-            MergeSort(arr);
-            Stopwatch stopwatch = new Stopwatch();
-            stopwatch.Start();
-            MergeSort(arr);
-            stopwatch.Stop();
-            Console.WriteLine("After Merge Sort");
-            Print(arr);
-            Console.WriteLine($"ArraySize {arr.Length} TimeTaken{stopwatch.Elapsed.TotalMilliseconds} milliseconds");     
-                                  
-            
-            int[] array = { 64, 34, 25, 12, 22, 11, 90 };
-            Console.WriteLine("*********QUick Sort starts*********");
-            Console.WriteLine("Original Array");
-            Print(array);                     
-            stopwatch.Start();
-            QuickSort(array);
-            stopwatch.Stop();
-            Console.WriteLine("After quick Sort");
-            Print(array);
-            Console.WriteLine($"ArraySize {array.Length} TimeTaken{stopwatch.Elapsed.TotalMilliseconds} milliseconds");
-            Console.ReadKey();
+            int n = arr.Length;
+            int gap = n / 2;
+            while (gap > 0)
+            {
+                for (int i = gap; i < n; i++)
+                {
+                    int temp = arr[i];
+                    int j = i;
+                    while (j >= gap && arr[j - gap] > temp)
+                    {
+                        arr[j] = arr[j - gap];
+                        j -= gap;
+                    }
+                    arr[j] = temp;
+                }
+                gap /= 2;
+            }
+        }
+        public static int[] GenerateRandomArray(int k)
+        {
+            Random random = new Random();
+            int[] arr = new int[k];
+            for (int i = 0; i < k; i++)
+            {
+                arr[i] = random.Next(1, 150);
+            }
+            return arr;
+        }
+        public static void PrintArr(int[] arr)
+        {
+            Console.WriteLine(string.Join(" ", arr));
+        }
+
+        static void Main(string[] args)
+        {            
+            int[] arrSizes = { 20, 30, 50 };
+            foreach (int k in arrSizes)
+            {
+                int[] randomArray = GenerateRandomArray(k);
+                int[] quickSortArray = (int[])randomArray.Clone();
+                int[] mergeSortArray = (int[])randomArray.Clone();
+                int[] shellSortArray = (int[])randomArray.Clone();
+                Console.WriteLine($"Sorting {k} elements with QuickSort");
+                Stopwatch stopwatch1 = new Stopwatch();
+                stopwatch1.Start();
+                QuickSort(quickSortArray);
+                stopwatch1.Stop();
+                Console.WriteLine("Quick sorted array:");
+                PrintArr(quickSortArray);
+                Console.WriteLine($"QuickSort time taken: {stopwatch1.Elapsed.TotalMilliseconds} milliseconds");
+
+                Console.WriteLine($"Sorting {k} elements with MergeSort");
+                Stopwatch stopwatch2 = new Stopwatch();
+                stopwatch2.Start();
+                MergeSort(mergeSortArray);
+                stopwatch2.Stop();
+                Console.WriteLine("Merge sorted array:");
+                PrintArr(mergeSortArray);
+                Console.WriteLine($"MergeSort time taken: {stopwatch2.Elapsed.TotalMilliseconds} milliseconds");
+
+                Console.WriteLine($"Sorting {k} elements with ShellSort");
+                Stopwatch stopwatch3 = new Stopwatch();
+                stopwatch3.Start();
+                ShellSort(shellSortArray);
+                stopwatch3.Stop();
+                Console.WriteLine("Shell sorted array:");
+                PrintArr(shellSortArray);
+                Console.WriteLine($"ShellSort time taken: {stopwatch3.Elapsed.TotalMilliseconds} milliseconds");
+                Console.ReadKey();
+            }
         }
     }
 }
+
+//Advanatages of 
